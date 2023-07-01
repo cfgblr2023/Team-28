@@ -16,7 +16,7 @@ export default function Login() {
         password: credentials.password,
       })
     );
-    const response = await fetch("http://localhost:5000/api/login", {
+    const response = await fetch("http://localhost:5000/api/users/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -34,7 +34,12 @@ export default function Login() {
       alert("Enter valid credentials");
     }
     if (json.success) {
-      navigate("/");
+
+      localStorage.setItem("userRole",json.userRole);
+      console.log(localStorage.getItem("userRole"));
+
+      
+      navigate("/home");
     }
   };
 
