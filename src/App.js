@@ -12,6 +12,7 @@ import Login from './components/screens/Login';
 import SignUp from './components/screens/SignUp';
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle';
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
+import UploadPhotos from './components/screens/UploadPhotos';
 
 
 const App = () => {
@@ -74,7 +75,7 @@ const App = () => {
                 <Route path="/home" element={(<Home />)} />
                 <Route path="/login" element={(<Login />)} />
                 <Route path="/signup" element={(<SignUp />)} />
-
+                <Route exact path="/UploadPhotos" element={<UploadPhotos />} />
                 {/* pages  */}
                 {/* <Route exact path="/transactions" element={<Transactions />} /> */}
 

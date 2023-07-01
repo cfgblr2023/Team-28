@@ -115,7 +115,7 @@ export const links = [
         icon: <BsCashCoin />,
       },
       {
-        name: "Upload Photos",
+        name: "UploadPhotos",
         icon: <BsCashCoin />,
       },
     ],
