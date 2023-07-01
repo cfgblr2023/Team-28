@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import { AiOutlineMenu } from 'react-icons/ai';
-import { TooltipComponent } from '@syncfusion/ej2-react-popups';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from "react";
+import { AiOutlineMenu } from "react-icons/ai";
+import { TooltipComponent } from "@syncfusion/ej2-react-popups";
+import { Link, useNavigate } from "react-router-dom";
 
-import avatar from '../data/avatar.jpg';
-import { useStateContext } from '../contexts/ContextProvider';
+import avatar from "../data/avatar.jpg";
+import { useStateContext } from "../contexts/ContextProvider";
 
 const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
   <TooltipComponent content={title} position="BottomCenter">
@@ -24,16 +24,24 @@ const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
 );
 
 const Navbar = () => {
-  const { currentColor, activeMenu, setActiveMenu, handleClick, isClicked, setScreenSize, screenSize } = useStateContext();
+  const {
+    currentColor,
+    activeMenu,
+    setActiveMenu,
+    handleClick,
+    isClicked,
+    setScreenSize,
+    screenSize,
+  } = useStateContext();
 
   useEffect(() => {
     const handleResize = () => setScreenSize(window.innerWidth);
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     handleResize();
 
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
@@ -47,21 +55,30 @@ const Navbar = () => {
   const handleActiveMenu = () => setActiveMenu(!activeMenu);
 
   const buttonStyle = {
-    backgroundColor: 'white',
-    color: 'black',
-    border: '1px solid black',
-    padding: '10px 20px',
-    borderRadius: '4px',
-    fontSize: '16px',
-    fontWeight: 'bold',
-    cursor: 'pointer',
+    backgroundColor: "white",
+    color: "black",
+    border: "1px solid black",
+    padding: "10px 20px",
+    borderRadius: "4px",
+    fontSize: "16px",
+    fontWeight: "bold",
+    cursor: "pointer",
     // Add additional styles as needed
+  };
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.setItem("userRole", "");
+    navigate("/login");
   };
 
   return (
     <div className="flex justify-between p-2 md:ml-6 md:mr-6 relative">
-
-      <NavButton title="Menu" customFunc={handleActiveMenu} color={currentColor} icon={<AiOutlineMenu />} />
+      <NavButton
+        title="Menu"
+        customFunc={handleActiveMenu}
+        color={currentColor}
+        icon={<AiOutlineMenu />}
+      />
 
       {/* <div className="flex">
         <TooltipComponent content="Profile" position="BottomCenter">
@@ -86,10 +103,20 @@ const Navbar = () => {
         {isClicked.userProfile && (<UserProfile />)}
       </div> */}
 
-      <div className="ml-auto flex gap-4">
-        <Link to="/login" style={buttonStyle}>Login</Link>
-        <Link to="/signup" style={buttonStyle}>SignUp</Link>
-      </div>
+      {!localStorage.getItem("userRole") ? (
+        <div className="ml-auto flex gap-4">
+          <Link to="/login" style={buttonStyle}>
+            Login
+          </Link>
+          <Link to="/signup" style={buttonStyle}>
+            SignUp
+          </Link>
+        </div>
+      ) : (
+        <button className="btn btn-outline-danger mx-2" onClick={handleLogout}>
+          Logout
+        </button>
+      )}
     </div>
   );
 };
