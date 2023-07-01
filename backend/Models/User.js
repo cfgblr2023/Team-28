@@ -18,7 +18,11 @@ const UserSchema =new Schema({
    date :{
      type:Date,
      default:Date.now
-   }
+   },
+   sessions:[{
+    type:mongoose.Schema.ObjectId,
+    ref:"Session"
+   }]
 });
 const User=mongoose.model('user',UserSchema);
 // User.createIndexes();

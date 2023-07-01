@@ -11,11 +11,11 @@ const sessionSchema = new mongoose.Schema({
   },
   coordinatesCovered: [{
     latitude: {
-      type: Float,
+      type: mongoose.Schema.Types.Decimal128,
       required: true,
     },
     longitude: {
-      type: Float,
+      type: mongoose.Schema.Types.Decimal128,
       required: true,
     },
   }],
