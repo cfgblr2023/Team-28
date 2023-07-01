@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -10,87 +10,55 @@ import { FaDirections } from "react-icons/fa";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 import { useStateContext } from "../contexts/ContextProvider";
 import { Link } from "react-router-dom";
+import { useTimerContext } from "../contexts/SessionContext";
 
 const Session = () => {
+  const { startTime, endTime, elapsedTime, startTimer, endTimer, formatTime } =
+    useTimerContext();
   const [initialPoint, setInitialPoint] = useState(null);
   const [destinationPoint, setDestinationPoint] = useState(null);
-  const [startTime, setStartTime] = useState(null);
-  const [endTime, setEndTime] = useState(null);
-  const [location, setLocation] = useState(null);
+
+  const [location, setLocation] = useState({
+    latitude: 16.22,
+    longitude: 77.33,
+  });
   const [countdown, setCountdown] = useState(null);
-  const [elapsedTime, setElapsedTime] = useState(null);
 
-  useEffect(() => {
-    // Update the elapsed time every second
-    const interval = setInterval(() => {
-      if (startTime) {
-        const currentDate = new Date();
-        const elapsed = currentDate - startTime;
-        setElapsedTime(elapsed);
-      }
-    }, 1000);
+  // useEffect(() => {
+  //   // Update the elapsed time every second
+  //   const interval = setInterval(() => {
+  //     if (startTime) {
+  //       const currentDate = new Date();
+  //       const elapsed = currentDate - startTime;
+  //       setElapsedTime(elapsed);
+  //     }
+  //   }, 1000);
 
-    return () => {
-      clearInterval(interval);
-    };
-  }, [startTime]);
-
-  const formatTime = (time) => {
-    const seconds = Math.floor((time / 1000) % 60);
-    const minutes = Math.floor((time / 1000 / 60) % 60);
-    const hours = Math.floor((time / 1000 / 3600) % 24);
-
-    return `${hours.toString().padStart(2, "0")}:${minutes
-      .toString()
-      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-  };
-  const {
-    setCurrentColor,
-    setCurrentMode,
-    currentMode,
-    activeMenu,
-    currentColor,
-    themeSettings,
-    setThemeSettings,
-  } = useStateContext();
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // }, [startTime]);
 
   const handleStartTimer = () => {
-    const currentDate = new Date();
-    setStartTime(currentDate);
-
+    startTimer();
     // Start the countdown
     setCountdown(
       setInterval(() => {
         const currentTime = new Date().getTime();
-        const timeDiff = currentTime - currentDate.getTime();
+        const timeDiff = currentTime - startTime?.getTime();
         const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
         setCountdown(`${minutes}m ${seconds}s`);
       }, 1000)
     );
   };
-  useEffect(() => {
-    let interval;
-
-    if (startTime && !endTime) {
-      interval = setInterval(() => {
-        const currentDate = new Date();
-        const elapsed = currentDate - startTime;
-        setElapsedTime(elapsed);
-      }, 1000);
-    }
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [startTime, endTime]);
+  
   const handleEndTimer = () => {
-    const currentDate = new Date();
-    setEndTime(currentDate);
-
+    endTimer();
+    console.log("handleEndTimer");
     // // Stop the countdown
-    // clearInterval(countdown);
-    // setCountdown(null);
+    clearInterval(countdown);
+    setCountdown(null);
   };
 
   useEffect(() => {
@@ -102,6 +70,7 @@ const Session = () => {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
           });
+          console.log(position);
         },
         (error) => {
           console.error(error);
@@ -116,9 +85,7 @@ const Session = () => {
 
     // Stop Timer and Clear Interval on component unmount
     return () => {
-      const currentDate = new Date();
-      setEndTime(currentDate);
-      clearInterval(interval);
+      
     };
   }, []);
 
@@ -147,12 +114,15 @@ const Session = () => {
   return (
     <div className="w-full h-full">
       <MapContainer
-        center={[51.505, -0.09]}
+        center={[location.latitude, location.longitude]}
         zoom={13}
         style={{ height: "100%", width: "100%" }}
       >
         <MapEvents />
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        {location && (
+          <Marker position={[location.latitude, location.longitude]} />
+        )}
       </MapContainer>
       <div className="clock-container">
         <div className="clock-face border-2 border-black rounded-full relative">
