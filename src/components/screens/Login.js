@@ -37,6 +37,9 @@ export default function Login() {
 
       localStorage.setItem("userRole",json.userRole);
       console.log(localStorage.getItem("userRole"));
+      
+      localStorage.setItem("userId",json.userRole);
+      console.log(localStorage.getItem("userId"));
 
       
       navigate("/home");

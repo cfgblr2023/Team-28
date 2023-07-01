@@ -107,7 +107,7 @@ export const links = [
         icon: <BsCashCoin />,
       },
       {
-        name: "All Sessions",
+        name: "AllSessions",
         icon: <BsCashCoin />,
       },
       {

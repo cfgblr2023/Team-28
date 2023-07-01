@@ -32,20 +32,14 @@ router.post(
   "/login",
   async (req, res) => {
 
-
     let email = req.body.email;
-
     try {
       let userData = await User.findOne({ email });
-      
-
       if (!userData) {
         return res
           .status(400)
           .json({ errors: "Try logging in with correct credentials" });
       }
-
-
       if (req.body.password === userData.password) {
         return res
           .status(400)
@@ -54,8 +48,9 @@ router.post(
       
       let userRole = userData.role;
       let userEmail = userData.email;
+      let userId = userData._id;
 
-      return res.json({ success: true, userRole:userRole, userEmail:userEmail})
+      return res.json({ success: true, userRole:userRole, userEmail:userEmail, userId:userId})
 
     } catch (error) {
       console.log(error);
@@ -83,19 +78,39 @@ router.post('/createSession', async (req, res) => {
     )
 });
 
+//create a session
+router.post('/createSession', async (req, res) => {
+  latitude=req.body.coordinatesCovered.latitude;
+  longitude=req.body.coordinatesCovered.longitude;
+  x={latitude,longitude};
+  y=[];
+  y.push(x);
+  const session = new Session({
+      startTimestamp: req.body.startTimestamp,
+      endTimestamp:req.body.startTimestamp,
+      coordinatesCovered:y,    
+  });
+  const createdSession = await session.save();
+  res.send({
+      _id: createdSession._id
+  }
+         
+  )
+});
+
 //ongoing a session
 router.post('/ongoingSession/:id', async (req, res) => {
-    id=req.params.id;
-    latitude=req.body.coordinatesCovered.latitude;
-    longitude=req.body.coordinatesCovered.longitude;
-    x={latitude,longitude};
-    const session = await Session.findById(id);
-    session.coordinatesCovered.push(x);
-    const updatedSession = await session.save();
-    res.send({
-        _id: updatedSession._id
-    }
-    );
+  id=req.params.id;
+  latitude=req.body.coordinatesCovered.latitude;
+  longitude=req.body.coordinatesCovered.longitude;
+  x={latitude,longitude};
+  const session = await Session.findById(id);
+  session.coordinatesCovered.push(x);
+  const updatedSession = await session.save();
+  res.send({
+      _id: updatedSession._id
+  }
+  );
 });
 
 //end a session

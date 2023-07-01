@@ -22,7 +22,12 @@ const UserSchema =new Schema({
    role :{
     type:String,
     required: true
-   }
+   },
+   sessions :[
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "Session"
+    }]
 });
 
 const User=mongoose.model('user',UserSchema);
