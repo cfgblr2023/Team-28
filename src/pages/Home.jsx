@@ -30,8 +30,6 @@ const DropDown = ({ currentMode }) => (
 );
 
 const Home = () => {
-
-
   // const {
   //   currentColor,
   //   currentMode,
@@ -48,7 +46,6 @@ const Home = () => {
   //   expenseTotal ? expenseTotal : 0;
   // };
   // console.log(transactions, "transactions");
-
 
   return (
     // <div className="mt-24">
@@ -244,14 +241,7 @@ const Home = () => {
     //     </div>
     //   </div>
     // </div>
-
-    <div>
-      
-      <div>
-      <MapComponent/>
-      </div>
-      <br/><br/><br/><br/><br/><br/>
-    </div>
+    <div className="flex-1 min-h-full h-full w-full"><MapComponent/></div>
   );
 };
 

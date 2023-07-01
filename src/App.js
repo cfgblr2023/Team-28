@@ -12,6 +12,7 @@ import Login from './components/screens/Login';
 import SignUp from './components/screens/SignUp';
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle';
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
+import Session from './pages/Session';
 
 
 const App = () => {
@@ -65,7 +66,7 @@ const App = () => {
             <div className="fixed md:static bg-main-bg dark:bg-main-dark-bg navbar w-full ">
               <Navbar />
             </div>
-            <div>
+            <div className="flex-1 h-full w-full">
               {themeSettings && (<ThemeSettings />)}
 
               <Routes>
@@ -74,6 +75,7 @@ const App = () => {
                 <Route path="/home" element={(<Home />)} />
                 <Route path="/login" element={(<Login />)} />
                 <Route path="/signup" element={(<SignUp />)} />
+                <Route path="/session/:id" element={(<Session />)} />
 
                 {/* pages  */}
                 {/* <Route exact path="/transactions" element={<Transactions />} /> */}
@@ -81,7 +83,7 @@ const App = () => {
 
               </Routes>
             </div>
-            <Footer />
+            {/* <Footer /> */}
           </div>
         </div>
       </BrowserRouter>
