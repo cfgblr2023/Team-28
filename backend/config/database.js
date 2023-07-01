@@ -1,9 +1,19 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const mongoURI = "mongodb+srv://kushagra:kushagra@jpmc.iuy3hkm.mongodb.net/JPMC";
+mongoose.set("strictQuery", false);
 
-const connectDatabase=()=>{ mongoose.connect("mongodb://127.0.0.1:27017/JPMC", {useNewUrlParser: true, useUnifiedTopology: true})
-.then(data=>{
-    console.log(`MongoDB connected with server: ${data.connection.host}`);
-})
-} 
+const connectToMongoDB = async () => {
+  try {
+    await mongoose.connect(mongoURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("Connected to MongoDB");
 
-module.exports=connectDatabase;
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+    process.exit(1); // Exit the process with an error
+  }
+};
+
+module.exports = connectToMongoDB;

@@ -1,17 +1,47 @@
-const app = require('./app.js');
-const dotenv = require('dotenv');
-const connectDatabase = require('./config/database.js');
+const express = require("express");
+const app = express();
+const port = 5000;
+const connectToMongoDB = require("./config/database.js");
+const cors = require("cors");
 
+// Connect to MongoDB
+connectToMongoDB().then(() => {
+    // Set CORS headers
+    app.use(cors());
 
-//config
-dotenv.config({ path: 'backend/config/config.env' });
+    // Custom CORS headers
+    app.use((req, res, next) => {
+      res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+      res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+      res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
+      );
 
-console.log("working") ;
+      next();
+    });
 
-//connect to database
-connectDatabase();
+    // Parse JSON request bodies
+    app.use(express.json());
 
-const server=app.listen(process.env.PORT || 3000, () => {
-    console.log(`Server is running on port ${process.env.PORT || 3000}`);
-});
+    // Register routes
 
+    const userRoute = require("./routes/userRoute.js");
+    const healthCheck = require("./routes/healthCheck.js");
+
+    app.use("/", healthCheck);
+    app.use("/api/users", userRoute);
+
+    // Hello World route
+    app.get("/", (req, res) => {
+      res.send("Hello World!");
+    });
+
+    // Start the server
+    app.listen(port, () => {
+      console.log(`Example app listening on port ${port}`);
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });

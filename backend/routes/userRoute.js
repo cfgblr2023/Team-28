@@ -1,44 +1,67 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const User= require('../Models/User.js');
+const User = require("../models/User");
+const { body, validationResult } = require("express-validator");
 
-//create a user
-router.post('/register', async (req, res) => {
-    const user = new User({
+
+router.post(
+  "/register",
+
+  async (req, res) => {
+    try {
+      await User.create({
         name: req.body.name,
-        email:req.body.email,
-        password:req.body.password,
-    });
-    const createdUser = await user.save();
-    res.send({
-        _id: createdUser._id,
-        name: createdUser.name,
-        email: createdUser.email,
-    })
-});
-
-router.post('/login', async (req, res) => {
-    const {email,password}=req.body;
-
-    //check if email and password is entered by user
-    if(!email || !password){
-        res.send("Please enter email or password");
+        password: req.body.password,
+        email: req.body.email,
+        role:"users"
+      });
+      res.json({ success: true });
+    } catch (error) {
+      console.log(error);
+      res.json({ success: false });
     }
+  }
+);
 
-    //finding user in database
-    const user=await User.findOne({email});
 
-    if(!user){
-        res.send("User not found");
-    }
 
-    //check if password is correct or not
-    if(user.password===password){
-        res.send("Login Successfull");
+
+
+
+router.post(
+  "/login",
+  async (req, res) => {
+
+
+    let email = req.body.email;
+
+    try {
+      let userData = await User.findOne({ email });
+      
+
+      if (!userData) {
+        return res
+          .status(400)
+          .json({ errors: "Try logging in with correct credentials" });
+      }
+
+
+      if (req.body.password === userData.password) {
+        return res
+          .status(400)
+          .json({ errors: "Try logging in with correct credentials" });
+      }
+      
+      let userRole = userData.role;
+      let userEmail = userData.email;
+
+      return res.json({ success: true, userRole:userRole, userEmail:userEmail})
+
+    } catch (error) {
+      console.log(error);
+      res.json({ success: false });
     }
-    else{
-        res.send("Invalid username or password");
-    }
-    });
+  }
+);
 
 module.exports = router;
