@@ -13,6 +13,7 @@ import SignUp from './components/screens/SignUp';
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle';
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
 import UploadPhotos from './components/screens/UploadPhotos';
+import AllSessions from './components/screens/AllSessions';
 
 
 const App = () => {
@@ -76,6 +77,8 @@ const App = () => {
                 <Route path="/login" element={(<Login />)} />
                 <Route path="/signup" element={(<SignUp />)} />
                 <Route exact path="/UploadPhotos" element={<UploadPhotos />} />
+                <Route exact path="/AllSessions" element={<AllSessions userId={localStorage.getItem("userId")} />} />
+
                 {/* pages  */}
                 {/* <Route exact path="/transactions" element={<Transactions />} /> */}
 
