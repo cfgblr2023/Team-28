@@ -13,6 +13,7 @@ import SignUp from './components/screens/SignUp';
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle';
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
 import Session from './pages/Session';
+import UploadPhotos from './components/screens/UploadPhotos';
 
 
 const App = () => {
@@ -77,6 +78,7 @@ const App = () => {
                 <Route path="/signup" element={(<SignUp />)} />
                 <Route path="/session/:id" element={(<Session />)} />
 
+                <Route exact path="/UploadPhotos" element={<UploadPhotos />} />
                 {/* pages  */}
                 {/* <Route exact path="/transactions" element={<Transactions />} /> */}
 

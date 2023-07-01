@@ -18,8 +18,13 @@ const UserSchema =new Schema({
    date :{
      type:Date,
      default:Date.now
+   },
+   role :{
+    type:String,
+    required: true
    }
 });
+
 const User=mongoose.model('user',UserSchema);
 // User.createIndexes();
 module.exports =User;
