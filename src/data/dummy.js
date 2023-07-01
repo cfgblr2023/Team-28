@@ -114,6 +114,10 @@ export const links = [
         name: "Start Sessions",
         icon: <BsCashCoin />,
       },
+      {
+        name: "Upload Photos",
+        icon: <BsCashCoin />,
+      },
     ],
   },
 ];
