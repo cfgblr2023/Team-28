@@ -7,15 +7,15 @@ const sessionSchema = new mongoose.Schema({
   },
   endTimestamp: {
     type: String,
-    required: true,
+    required: false,
   },
   coordinatesCovered: [{
     latitude: {
-      type: Float,
+      type: mongoose.Schema.Types.Decimal128,
       required: true,
     },
     longitude: {
-      type: Float,
+      type: mongoose.Schema.Types.Decimal128,
       required: true,
     },
   }],

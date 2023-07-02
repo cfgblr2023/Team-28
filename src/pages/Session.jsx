@@ -9,20 +9,46 @@ import {
 import { FaDirections } from "react-icons/fa";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 import { useStateContext } from "../contexts/ContextProvider";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTimerContext } from "../contexts/SessionContext";
+import { FiSettings } from "react-icons/fi";
+import { FaCamera } from "react-icons/fa";
+import {
+  SparklineAreaData,
+  dropdownData,
+  ecomPieChartData,
+  recentTransactions,
+} from "../data/dummy";
 
 const Session = () => {
-  const { startTime, endTime, elapsedTime, startTimer, endTimer, formatTime } =
-    useTimerContext();
+  const {
+    startTime,
+    endTime,
+    elapsedTime,
+    startTimer,
+    endTimer,
+    formatTime,
+    activeSessionId,
+    setActiveSessionId,
+  } = useTimerContext();
   const [initialPoint, setInitialPoint] = useState(null);
   const [destinationPoint, setDestinationPoint] = useState(null);
-
+  const navigation = useNavigate();
   const [location, setLocation] = useState({
     latitude: 16.22,
     longitude: 77.33,
   });
   const [countdown, setCountdown] = useState(null);
+  const {
+    setCurrentColor,
+    setCurrentMode,
+    currentMode,
+    activeMenu,
+    currentColor,
+    themeSettings,
+    setThemeSettings,
+  } = useStateContext();
+  
 
   // useEffect(() => {
   //   // Update the elapsed time every second
@@ -52,13 +78,41 @@ const Session = () => {
       }, 1000)
     );
   };
-  
-  const handleEndTimer = () => {
+
+  const handleEndTimer = async () => {
     endTimer();
-    console.log("handleEndTimer");
+    console.log("handleEndTimer", activeSessionId);
     // // Stop the countdown
     clearInterval(countdown);
     setCountdown(null);
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      console.log("userId", JSON.parse(userId));
+      const url =
+        "http://localhost:5000/api/users/endSession/" +
+        activeSessionId.toString();
+      console.log(url, "userid", userId, "URL");
+      if (activeSessionId)
+        fetch(url, {
+          method: "POST",
+          body: JSON.stringify({
+            endTimeStamp: new Date().toISOString(),
+            userId: JSON.parse(userId),
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Session:", data);
+            setActiveSessionId("");
+            navigation("/home");
+          })
+          .catch((error) => {
+            console.error("Error uploading image:", error);
+          });
+    }
   };
 
   useEffect(() => {
@@ -66,11 +120,36 @@ const Session = () => {
     const fetchLocation = () => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
+          console.log("sessionss", activeSessionId);
           setLocation({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
           });
-          console.log(position);
+          const url =
+            "http://localhost:5000/api/users/ongoingSession/" +
+            activeSessionId.toString();
+          console.log(url, "URL");
+          if (activeSessionId)
+            fetch(url, {
+              method: "POST",
+              body: JSON.stringify({
+                coordinatesCovered: {
+                  latitude: position.coords.latitude,
+                  longitude: position.coords.longitude,
+                },
+              }),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                console.log("Session:", data);
+                setActiveSessionId(data._id);
+              })
+              .catch((error) => {
+                console.error("Error uploading image:", error);
+              });
         },
         (error) => {
           console.error(error);
@@ -84,9 +163,7 @@ const Session = () => {
     }, 30000);
 
     // Stop Timer and Clear Interval on component unmount
-    return () => {
-      
-    };
+    return () => {};
   }, []);
 
   const handleMapClick = (e) => {
@@ -160,20 +237,33 @@ const Session = () => {
         className="fixed bottom-4 left-0 right-0 flex justify-center"
         style={{ zIndex: 1000 }}
       >
-        <button
+        {/* <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           onClick={handleStartTimer}
           disabled={startTime !== null}
         >
           {startTime ? "Timer Started" : "Start Timer"}
-        </button>
-        <button
-          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-4"
-          onClick={handleEndTimer}
-          disabled={!startTime || endTime !== null}
-        >
-          {endTime ? "Timer Ended" : "End Timer"}
-        </button>
+        </button> */}
+        {
+          <button
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-4"
+            onClick={handleEndTimer}
+          >
+            Close Session
+          </button>
+        }
+      </div>
+      <div className="fixed left-4 bottom-4" style={{ zIndex: "1000" }}>
+        <TooltipComponent content="Settings" position="Top">
+          <button
+            type="button"
+            onClick={() => navigation('/uploadPhotos')}
+            style={{ background: currentColor, borderRadius: "50%" }}
+            className="text-3xl text-white p-3 hover:drop-shadow-xl hover:bg-light-gray"
+          >
+            <FaCamera />
+          </button>
+        </TooltipComponent>
       </div>
       {startTime && (
         <div

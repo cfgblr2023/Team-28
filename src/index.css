@@ -11,7 +11,10 @@ body{
     width: 100%;
   }
   
-
+.circle-icon {
+  background-color: red;
+  border-radius: 50%;
+}
 
 @tailwind base;
 @tailwind components;

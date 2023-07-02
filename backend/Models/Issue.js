@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const issueSchema = new mongoose.Schema({
   photo: {
-    type:URL,
+    type:String,
     required:true
 
   },
@@ -12,16 +12,16 @@ const issueSchema = new mongoose.Schema({
   },
   position: {
     latitude: {
-      type: Float,
+      type: mongoose.Schema.Types.Decimal128,
       required: true,
     },
     longitude: {
-      type: Float,
+      type: mongoose.Schema.Types.Decimal128,
       required: true,
     }
   }
 });
 
-const Issue = mongoose.model('issue', sessionSchema);
+const Issue = mongoose.model('issue', issueSchema);
 
 module.exports = Issue;

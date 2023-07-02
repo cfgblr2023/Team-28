@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
+import { Navigate, useNavigate } from "react-router";
 
 const TimerContext = createContext();
 
@@ -6,7 +7,8 @@ export const TimerProvider = ({ children }) => {
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(null);
-  const [activeSessionId,setActiveSessionId] = useState("");
+  const [activeSessionId, setActiveSessionId] = useState("");
+  
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -22,13 +24,10 @@ export const TimerProvider = ({ children }) => {
     };
   }, [startTime]);
 
-  const createSession = async () =>{
-    
-  }
-  const startTimer = () => {
+
+  const startTimer = async() => {
     const currentDate = new Date();
     setStartTime(currentDate);
-    
   };
 
   const endTimer = () => {
@@ -53,6 +52,8 @@ export const TimerProvider = ({ children }) => {
     startTimer,
     endTimer,
     formatTime,
+    setActiveSessionId,
+    activeSessionId,
   };
 
   return (

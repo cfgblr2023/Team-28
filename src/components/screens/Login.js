@@ -10,7 +10,7 @@ export default function Login() {
   let navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(
+    console.log('input body',
       JSON.stringify({
         email: credentials.email,
         password: credentials.password,
@@ -34,12 +34,13 @@ export default function Login() {
       alert("Enter valid credentials");
     }
     if (json.success) {
-
+      localStorage.setItem("userName",json.name)
+      localStorage.setItem("userEmail",json.userEmail)
       localStorage.setItem("userRole",json.userRole);
       console.log(localStorage.getItem("userRole"));
       
-      localStorage.setItem("userId",json.userRole);
-      console.log(localStorage.getItem("userId"));
+      localStorage.setItem("userId",JSON.stringify(json.userId));
+      // console.log(localStorage.getItem("userId"));
 
       
       navigate("/home");
@@ -51,14 +52,14 @@ export default function Login() {
   };
 
   return (
-    <div className="bg-light p-4">
+    <div className="bg-light h-full items-center flex p-4">
       <div className="container" style={{ maxWidth: "400px" }}>
         <h1 className="text-center mb-4">Sign In</h1>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="exampleInputEmail1" className="form-label">
-              Email address
+              Email addresss
             </label>
             <input
               type="email"

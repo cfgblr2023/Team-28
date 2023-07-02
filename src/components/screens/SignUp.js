@@ -44,7 +44,7 @@ export default function SignUp() {
   };
 
   return (
-    <div className="bg-light p-4">
+    <div className="bg-light h-full items-center flex p-4">
       <div className="container" style={{ maxWidth: "400px" }}>
         <h1 className="text-center mb-4">Sign Up</h1>
 
