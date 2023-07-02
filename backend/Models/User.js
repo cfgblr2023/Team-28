@@ -19,17 +19,15 @@ const UserSchema =new Schema({
      type:Date,
      default:Date.now
    },
-   role :{
+   role:{
     type:String,
-    required: true
+    default:"users",
    },
-   sessions :[
-    {
-      type: mongoose.Schema.ObjectId,
-      ref: "Session"
-    }]
+   sessions:[{
+    type:mongoose.Schema.ObjectId,
+    ref:"Session"
+   }]
 });
-
 const User=mongoose.model('user',UserSchema);
 // User.createIndexes();
 module.exports =User;

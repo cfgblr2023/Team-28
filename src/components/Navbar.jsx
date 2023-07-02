@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 
 import avatar from "../data/avatar.jpg";
 import { useStateContext } from "../contexts/ContextProvider";
+import { MdKeyboardArrowDown } from "react-icons/md";
+import UserProfile from "./UserProfile";
 
 const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
   <TooltipComponent content={title} position="BottomCenter">
@@ -72,15 +74,15 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex justify-between p-2 md:ml-6 md:mr-6 relative">
+    <div className="flex justify-between w-full p-2 md:ml-6 md:mr-6 relative">
       <NavButton
         title="Menu"
         customFunc={handleActiveMenu}
         color={currentColor}
         icon={<AiOutlineMenu />}
       />
-
-      {/* <div className="flex">
+{/* 
+      <div className="flex right-0">
         <TooltipComponent content="Profile" position="BottomCenter">
           <div
             className="flex items-center gap-2 cursor-pointer p-1 hover:bg-light-gray rounded-lg"
@@ -94,7 +96,7 @@ const Navbar = () => {
             <p>
               <span className="text-gray-400 text-14">Hi,</span>{' '}
               <span className="text-gray-400 font-bold ml-1 text-14">
-                Arya
+              {localStorage.getItem("userName") || ""}
               </span>
             </p>
             <MdKeyboardArrowDown className="text-gray-400 text-14" />
